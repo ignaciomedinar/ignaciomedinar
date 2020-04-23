@@ -23,6 +23,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.ejercicio = require("../models/ejercicios.js")(sequelize, Sequelize);
+db.log = require("../models/log.js")(sequelize, Sequelize);
 
 //Relations
 

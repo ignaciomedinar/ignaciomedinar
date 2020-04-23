@@ -21,6 +21,7 @@ ejerciciosApi(app);
 const db = require("./config/db.config.js");
 
 const Ejercicio = db.ejercicio;
+const Log = db.log;
 const User = db.user;
 
 // force: true will drop the table if it already exists

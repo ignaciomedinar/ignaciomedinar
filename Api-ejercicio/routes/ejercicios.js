@@ -35,6 +35,7 @@ function ejerciciosApi(app) {
     }
   });
 
+  // Nuevo registro
   router.post("/", async function(req, res, next) {
     const { body: ejercicio } = req;
     console.log(ejercicio);
@@ -52,11 +53,12 @@ function ejerciciosApi(app) {
     }
   });
 
+  // Editar status
   router.put("/:ejercicioId", async function(req, res, next) {
     const { ejercicioId } = req.params;
     const status = 0
     try {
-      const updatedEjercicioId = await ejerciciosService.updateEjercicio({
+      const updatedEjercicioId = await ejerciciosService.updateStatus({
         ejercicioId,
         status
       });
@@ -70,6 +72,24 @@ function ejerciciosApi(app) {
     }
   });
 
+  // Editar información
+  router.put("/", async function(req, res, next) {
+    const { body: ejercicio } = req;
+    try {
+      const updatedEjercicio = await ejerciciosService.updateEjercicio({
+        ejercicio
+      });
+
+      res.status(200).json({
+        data: updatedEjercicio,
+        message: "data ejercicio actualizado"
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  //Borrar registro
   router.delete("/:ejercicioId", async function(req, res, next) {
     console.log(req.params);
     const { ejercicioId } = req.params;

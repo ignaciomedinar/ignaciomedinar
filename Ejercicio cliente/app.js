@@ -27,7 +27,11 @@ formaAlta.addEventListener("submit", e => {
   const nombre = document.getElementsByName("nombre")[0].value;
   const numero = Number(document.getElementsByName("numero")[0].value);
   const email = document.getElementsByName("email")[0].value;
-  createEjercicio({nombre, numero, email});
+  if (ejercicioEdicion){
+    updateEjercicio({id: ejercicioEdicion[0].id, nombre, numero, email});
+  } else{
+    createEjercicio({nombre, numero, email});
+  }
 });
 
 // // hacer que aparezca en el html
@@ -98,6 +102,7 @@ const cargaMenu = () => {
         <td>${dato.email}</td>
         <td><button onClick="Eliminar(${dato.id})">Borrar de la base</button></td>
         <td><button onClick="CambiarStatus(${dato.id})">Borrar (visible)</button></td>
+        <td><button onClick="Editar(${dato.id})">Editar</button></td>
       </tr>
     `;
     })
@@ -157,3 +162,40 @@ function CambiarStatus(id){
 
       .catch(error => console.error("Error:", error))
 }
+
+var ejercicioEdicion
+
+function Editar(id){
+  var ejercicio = arregloDatos.filter(item=>{
+    return item.id === id
+  })
+  document.getElementsByName("nombre")[0].value = ejercicio[0].nombre
+  document.getElementsByName("numero")[0].value = ejercicio[0].numero
+  document.getElementsByName("email")[0].value = ejercicio[0].email
+  ejercicioEdicion = ejercicio
+  console.log(ejercicio)
+}
+
+const updateEjercicio = ejercicio => {
+  var url = "http://localhost:8080/api/ejercicios";
+  const data = JSON.stringify(ejercicio);
+  console.log(data);
+  fetch(url, {
+    method: "PUT", // or 'PUT'
+    body: data, // data can be `string` or {object}!
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then(res => {
+      if (res.status = 200){
+        console.log("Status 200, sí se actualizó!")
+        getDatos()
+        ejercicioEdicion= null
+        //aquí borrar forma
+      }
+     })
+
+    .catch(error => console.error("Error:", error))
+   
+};
