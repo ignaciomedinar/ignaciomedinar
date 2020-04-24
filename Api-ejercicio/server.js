@@ -4,7 +4,7 @@ const app = express();
 const ejerciciosApi = require("./routes/ejercicios");
 
 app.use(express.json());
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",
@@ -31,7 +31,7 @@ db.sequelize.sync({ force: false }).then(() => {
 });
 
 // Create a Server
-var server = app.listen(8080, function() {
+var server = app.listen(8080, function () {
   var host = server.address().address;
   var port = server.address().port;
 
@@ -39,15 +39,14 @@ var server = app.listen(8080, function() {
 });
 
 function initialize() {
-
   Ejercicio.create({
     nombre: "Ejemplo1",
     numero: "29.2",
-    email: "ejemplo1@equis.com"
+    email: "ejemplo1@equis.com",
   });
   Ejercicio.create({
     nombre: "Ejemplo2",
     numero: "7",
-    email: "ejemplo2@equis.com"
+    email: "ejemplo2@equis.com",
   });
 }

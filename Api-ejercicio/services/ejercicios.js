@@ -1,14 +1,17 @@
 const db = require("../config/db.config");
+const actions = require("../actions/log");
+const Logger = require("./logging");
 
 class EjerciciosService {
   constructor() {
     this.Ejercicio = db.ejercicio;
     this.Log = db.log;
+    this.actions = actions;
   }
 
   async getEjercicios() {
     const ejercicios = await this.Ejercicio.findAll({
-      where: { status: 1 }
+      where: { status: 1 },
     });
     return ejercicios || [];
   }
@@ -16,69 +19,72 @@ class EjerciciosService {
   async getEjercicio({ ejercicioId }) {
     const ejercicio = await this.Ejercicio.findOne({
       where: { id: ejercicioId },
-      include: [
-  
-      ]
+      include: [],
     });
 
     return ejercicio || {};
   }
 
   async createEjercicio({ ejercicio }) {
-    console.log(ejercicio);
     const createdEjercicio = await this.Ejercicio.create({ ...ejercicio });
-    console.log(createdEjercicio.id)
-    const updatedLog = await this.Log.create(
-      {id_ejercicio: createdEjercicio.id,
-        accion: "crear",
-        cambios: JSON.stringify( ejercicio )
-      }
-    )
+    const log = Logger(
+      ejercicio,
+      createdEjercicio,
+      this.actions.createEjercicio("Nuevo registro")
+    );
+    if (log) console.log("Se registró en el log");
     return createdEjercicio;
   }
 
   async updateStatus({ ejercicioId, status }) {
     const updatedEjercicioId = await this.Ejercicio.update(
-      {status},
-      {where: {id: ejercicioId}}
+      { status },
+      { where: { id: ejercicioId } }
     );
-    const updatedLog = await this.Log.create(
-      {id_ejercicio: ejercicioId,
-        accion: "status",
-        cambios: "se dio de baja"
-      }
-    )
-    return updatedEjercicioId;
+    const log = Logger(
+      { ejercicioId, status },
+      updatedEjercicioId,
+      this.actions.updateStatus("Baja lógica")
+    );
+    if (log) console.log("Se registró en el log");
   }
 
   async updateEjercicio({ ejercicio }) {
-    console.log(`Aquí es el log: ${ejercicio.id}`)
-    const updatedEjercicio = await this.Ejercicio.update(
-      {nombre: ejercicio.nombre,
-      numero: ejercicio.numero,
-      email: ejercicio.email},
-      {where: {id: ejercicio.id}}
+    const ejercicioAntesDeActualizar = await this.Ejercicio.findOne({
+      where: { id: ejercicio.id },
+      include: [],
+    });
+    const updatedEjercicioId = await this.Ejercicio.update(
+      {
+        nombre: ejercicio.nombre,
+        numero: ejercicio.numero,
+        email: ejercicio.email,
+      },
+      { where: { id: ejercicio.id } }
     );
-    const updatedLog = await this.Log.create(
-      {id_ejercicio: ejercicio.id,
-        accion: "update",
-        cambios: JSON.stringify( ejercicio )
-      }
-    )
-    return updatedEjercicio;
+    const log = Logger(
+      ejercicioAntesDeActualizar,
+      ejercicio,
+      this.actions.updateEjercicio("Actualización")
+    );
+    if (log) console.log("Se registró en el log");
+    return updatedEjercicioId;
   }
 
-
-  async deleteEjercicio({ ejercicioId}) {
-    const deletedEjercicio = await this.Ejercicio.destroy({
-      where: { id: ejercicioId }
+  async deleteEjercicio({ ejercicioId }) {
+    const ejercicioAntesDeBorrar = await this.Ejercicio.findOne({
+      where: { id: ejercicioId },
+      include: [],
     });
-    const updatedLog = await this.Log.create(
-      {id_ejercicio: ejercicioId,
-        accion: "borrar definitivo",
-        cambios: JSON.stringify( deletedEjercicio )
-      }
-    )
+    const deletedEjercicio = await this.Ejercicio.destroy({
+      where: { id: ejercicioId },
+    });
+    const log = Logger(
+      ejercicioAntesDeBorrar,
+      ejercicioId,
+      this.actions.deleteEjercicio("Baja permanente")
+    );
+    if (log) console.log("Se registró en el log");
     return deletedEjercicio;
   }
 }
