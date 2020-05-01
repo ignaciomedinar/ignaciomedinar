@@ -30,8 +30,9 @@ class EjerciciosService {
     const log = Logger(
       ejercicio,
       createdEjercicio,
-      this.actions.createEjercicio("Nuevo registro")
+      this.actions.logCreateEjercicio("Nuevo registro")
     );
+    console.log(JSON.stringify(this.actions.logCreateEjercicio("Nuevo registro")))
     if (log) console.log("Se registró en el log");
     return createdEjercicio;
   }
@@ -44,7 +45,7 @@ class EjerciciosService {
     const log = Logger(
       { ejercicioId, status },
       updatedEjercicioId,
-      this.actions.updateStatus("Baja lógica")
+      this.actions.logUpdateStatus("Baja lógica")
     );
     if (log) console.log("Se registró en el log");
   }
@@ -65,7 +66,7 @@ class EjerciciosService {
     const log = Logger(
       ejercicioAntesDeActualizar,
       ejercicio,
-      this.actions.updateEjercicio("Actualización")
+      this.actions.logUpdateEjercicio("Actualización")
     );
     if (log) console.log("Se registró en el log");
     return updatedEjercicioId;
@@ -82,9 +83,9 @@ class EjerciciosService {
     const log = Logger(
       ejercicioAntesDeBorrar,
       ejercicioId,
-      this.actions.deleteEjercicio("Baja permanente")
+      this.actions.logDeleteEjercicio("Baja permanente")
     );
-    if (log) console.log("Se registró en el log");
+    if (log) console.log("Se registró en el log"); //para ver si se ejecutó el log
     return deletedEjercicio;
   }
 }

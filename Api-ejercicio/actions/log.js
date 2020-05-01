@@ -6,19 +6,19 @@ const DETELE_EJERCICIO = "DETELE_EJERCICIO";
 
 // CREAR ACCIONES
 const actions = {
-  createEjercicio: (text) => ({
+  logCreateEjercicio: (text) => ({
     type: CREATE_EJERCICIO,
     text,
   }),
-  updateEjercicio: (text) => ({
+  logUpdateEjercicio: (text) => ({
     type: UPDATE_EJERCICIO,
     text,
   }),
-  updateStatus: (text) => ({
+  logUpdateStatus: (text) => ({
     type: UPDATE_STATUS,
     text,
   }),
-  deleteEjercicio: (text) => ({
+  logDeleteEjercicio: (text) => ({
     type: DETELE_EJERCICIO,
     text,
   }),
