@@ -14,6 +14,7 @@ const createEjercicio = ejercicio => {
         if (res.status = 200){
           console.log("Status 200, sí se guardó!")
           getDatos()
+          document.getElementById("forma-alta").reset();
         }
        })
 
@@ -193,6 +194,7 @@ const updateEjercicio = ejercicio => {
         getDatos()
         ejercicioEdicion= null
         //aquí borrar forma
+        document.getElementById("forma-alta").reset();
       }
      })
 
